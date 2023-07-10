@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/friends", (req, res) => {
-  res.json("server running...");
+  res.json(friends);
 });
 
 app.get("/friends/:friendId", (req, res) => {
