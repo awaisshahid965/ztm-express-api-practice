@@ -1,5 +1,5 @@
 const express = require("express");
-const FriendController = require("./controllers/FriendsController");
+const friendsRouter = require("./routes/friends.router");
 
 const app = express();
 
@@ -10,7 +10,9 @@ app.use((req, res, next) => {
   const start = Date.now();
   next();
   const timeToProcessRequest = Date.now() - start;
-  console.log(`${req.method} ${req.url} ${timeToProcessRequest}ms`);
+  console.log(
+    `${req.method} ${req.baseUrl}${req.url} ${timeToProcessRequest}ms`
+  );
 });
 
 app.use(express.json());
@@ -20,9 +22,7 @@ app.get("/", (req, res) => {
   res.send("server running...");
 });
 
-app.post("/friends", FriendController.createFriend);
-app.get("/friends", FriendController.getFriends);
-app.get("/friends/:friendId", FriendController.getFriend);
+app.use("/friends", friendsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
