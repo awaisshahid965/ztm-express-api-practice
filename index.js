@@ -1,18 +1,9 @@
 const express = require("express");
+const FriendController = require("./controllers/FriendsController");
 
 const app = express();
 
 const PORT = 3000;
-const friends = [
-  {
-    id: 0,
-    name: "User 0",
-  },
-  {
-    id: 1,
-    name: "User 1",
-  },
-];
 
 // middlewares
 app.use((req, res, next) => {
@@ -22,25 +13,16 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} ${timeToProcessRequest}ms`);
 });
 
+app.use(express.json());
+
+// routes
 app.get("/", (req, res) => {
   res.send("server running...");
 });
 
-app.get("/friends", (req, res) => {
-  res.json(friends);
-});
-
-app.get("/friends/:friendId", (req, res) => {
-  const friendId = Number(req.params.friendId);
-  const friend = friends[friendId];
-
-  if (friend) {
-    return res.status(200).json(friend);
-  }
-  res.status(404).json({
-    error: "friend not found...",
-  });
-});
+app.post("/friends", FriendController.createFriend);
+app.get("/friends", FriendController.getFriends);
+app.get("/friends/:friendId", FriendController.getFriend);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port: ${PORT}`);
